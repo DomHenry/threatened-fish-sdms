@@ -21,7 +21,7 @@ start <- Sys.time()
 
 # Select species ----------------------------------------------------------
 (folder_list <- dir("data output/sdm data processing/"))
-(sppselect <- folder_list[1])
+(sppselect <- folder_list[11])
 
 # Import species and environmental data -----------------------------------
 load(glue("data output/sdm data processing/{sppselect}/sdm_input_data.RData"))
@@ -52,7 +52,7 @@ op_thin <- spThin::thin(loc.data = op,
                         lat.col = "coords.x1",
                         long.col = "coords.x2",
                         spec.col = "scientific_name",
-                        thin.par = 0.8, # units = km
+                        thin.par = 0.4, # units = km
                         reps = 3,
                         locs.thinned.list.return = TRUE,
                         write.files = FALSE)
@@ -154,6 +154,9 @@ envpaths
 catchments <- st_read(glue("data output/sdm data processing/{sppselect}/catchments_{sppselect}.shp")) %>%
   st_transform(aeaproj)
 
+# catchments <- st_read(glue("data output/sdm data processing/{sppselect}/KZN_prov.shp")) %>%
+#   st_transform(aeaproj)
+
 catchments <- as(catchments, "Spatial")
 
 projenv_aea <- function(x){
@@ -175,7 +178,7 @@ map <- predict(sdm,
                envstack_catchment,
                quantiles=c(0.025, 0.975),
                quiet=FALSE,
-               splitby=10)
+               splitby=5)
 
 # Map plotting ------------------------------------------------------------
 

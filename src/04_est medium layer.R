@@ -67,7 +67,8 @@ map2(iucn_spp, bins,
 
 # Clip using Primary Catchment --------------------------------------------
 
-catchments <- st_read("data output/primary_catchment_latlong.shp", crs = latlongCRS) %>%
+catchments <- st_read("data input/Catchment Layers/primary_catchment/primary_catchment_latlong.shp",
+                      crs = latlongCRS) %>%
   st_transform(crs = aeaproj)
 
 prim_spp <- spp_clip_ref %>%

@@ -17,8 +17,7 @@ library(tidyverse)
 library(glue)
 ## ________________________________________________________________________
 
-## Error in dl18 and dl20 - these rasters are empty! Need to check hydrological data generation step
-x <- "data input/Queries/SDM_query_Labeo rubromaculatus.xlsx"
+x <- "data input/Queries/SDM_query_Oreochromis mossambicus.xlsx"
 
 load("data output/occ_data_clean.RData")
 start <- Sys.time()
@@ -41,7 +40,6 @@ occ_data_sf_all <- occ_data_sf_all %>%
   mutate(year = year(sampling_date)) %>%
   filter(year >= as.numeric(query$Value[which(query$Input == "Start year")])) %>%
   filter(year <= as.numeric(query$Value[which(query$Input == "End year")]))
-
 
 # Create output folder ----------------------------------------------------
 if(dir.exists(glue("data output/sdm data processing/{sppselect}"))) {
@@ -71,14 +69,24 @@ plot(occ_data_sf_all$geometry)
 plot(range$geometry, add = TRUE)
 plot(st_buffer(range,0.1)$geometry, add = TRUE)
 
-## Intersect range and keep points within range and buffer
-occ_data_sf <- st_intersection(occ_data_sf_all, st_buffer(range,0.1))
+## KEEP ALL POINTS FOR CERTAIN SPECIES (LIKE TILAPIA)
+keep_all = TRUE
 
-## Write outlying points to file
-occ_data_sf_all %>%
-  filter(!(occurrence_id %in% occ_data_sf$occurrence_id)) %>%
-  st_write(glue("data output/sdm data processing/{sppselect}/Outlier_occ_{sppselect}.shp"),
-           delete_dsn = TRUE)
+if(keep_all){
+
+  occ_data_sf <-  occ_data_sf_all
+} else{
+
+  ## Intersect range and keep points within range and buffer
+  occ_data_sf <- st_intersection(occ_data_sf_all, st_buffer(range,0.1))
+
+  ## Write outlying points to file
+  occ_data_sf_all %>%
+    filter(!(occurrence_id %in% occ_data_sf$occurrence_id)) %>%
+    st_write(glue("data output/sdm data processing/{sppselect}/Outlier_occ_{sppselect}.shp"),
+             delete_dsn = TRUE)
+  }
+
 
 # Spatial projections  ----------------------------------------------------
 geo_proj <- query$Value[which(query$Input == "Geographic projection")]

@@ -238,6 +238,10 @@ map2(quart_spp, bins,
 
 
 # Clip using IUCN + Primary -----------------------------------------------
+catchments <- st_read("data input/Catchment Layers/primary_catchment/primary_catchment_latlong.shp",
+                      crs = latlongCRS) %>%
+  st_transform(crs = aeaproj)
+
 com_spp <- spp_clip_ref %>%
   filter(clipping_extent == "iucn_and_primary") %>%
   pull(scientific_name)
@@ -297,7 +301,6 @@ map2(com_spp, bins,
 
 
 # Combine all medium shapefiles -------------------------------------------
-
 shpfiles <- dir("data output/screening tool layers/medium", full.names = TRUE, pattern =".shp")
 shpfiles
 

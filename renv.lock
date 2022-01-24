@@ -81,10 +81,10 @@
     },
     "Rcpp": {
       "Package": "Rcpp",
-      "Version": "1.0.5",
+      "Version": "1.0.8",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "125dc7a0ed375eb68c0ce533b48d291f"
+      "Hash": "22b546dd7e337f6c0c58a39983a496bc"
     },
     "RcppArmadillo": {
       "Package": "RcppArmadillo",
